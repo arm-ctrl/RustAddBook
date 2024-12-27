@@ -10,10 +10,11 @@ Ce projet est un gestionnaire de connexions pour RustDesk, permettant de gérer 
 
 ## Prérequis
 
-- Python 3.x
+- Python 3
 - Bibliothèques Python nécessaires :
   - pandas
   - colorama
+  - getpass (intégré à Python, pas besoin d'installation)
 
 ## Installation et Utilisation
 
