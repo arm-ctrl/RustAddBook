@@ -29,6 +29,9 @@ Ce projet est un gestionnaire de connexions pour RustDesk, permettant de gérer 
    ```bash
    pip install pandas colorama
    ```
+   ```bash
+   pip install openpyxl
+   ```
 
 4. Créer le fichier `address_book.xlsx` dans le répertoire `C:\Windows\` :
    Le format a respecter est le suivant :
