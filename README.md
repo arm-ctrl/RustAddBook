@@ -4,56 +4,38 @@ Ce projet est un gestionnaire de connexions pour RustDesk, permettant de gérer 
 
 ## Fonctionnalités
 
-- Chargement des clients et de leurs appareils à partir d'un fichier Excel.
-- Interface en ligne de commande pour sélectionner un client et se connecter à un appareil.
-- Saisie sécurisée des mots de passe lors de la connexion.
+- Chargement des clients et de leurs appareils à partir d'un fichier Excel
+- Interface graphique moderne et intuitive
+- Sélection facile des clients et des appareils
+- Saisie sécurisée des mots de passe
+- Connexion rapide aux appareils distants
 
-## Prérequis
+### Version Interface Graphique (Recommandée)
+Téléchargez et exécutez la version .exe disponible dans "Interface graphique"
 
-- Python 3
-- Bibliothèques Python nécessaires :
-  - pandas
-  - colorama
-  - getpass (intégré à Python, pas besoin d'installation)
+### Version Console
+1) Si vous préférez utiliser la version console, téléchargez et exécutez la version le "rustdesk.py" disponible dans "CLI" :
 
-## Installation et Utilisation
+2) 
+```bash
+python rustdesk.py
+```
 
-1. Télécharger le script python.
+## Configuration
 
-2. Ouvrir un CMD, accéder au répertoire où le script est situé :
-   ```bash
-   cd repo
-   ```
-
-3. Installer les dépendances :
-   ```bash
-   pip install pandas colorama
-   ```
-   ```bash
-   pip install openpyxl
-   ```
-
-4. Créer le fichier `address_book.xlsx` dans le répertoire `C:\Windows\` :
-   Le format a respecter est le suivant :
-   - Colonne 1 : Client
-   - Colonne 2 : Nom du PC
-   - Colonne 3 : Identifiant
-
-5. Exécuter le script :
-   ```bash
-   python rustdesk.py
-   ```
-
-6. Suivre les instructions affichées dans le terminal.
-
-## Autres
-
-Installer RustDesk en dur sur le PC et ne pas utiliser la version portable.
-
-Le script ira chercher l'executable de RustDesk dans les deux chemins suivants :
+Les 2 versions recherchent l'exécutable RustDesk dans les emplacements suivants :
 - `C:\Program Files\RustDesk\rustdesk.exe`
 - `C:\Program Files (x86)\RustDesk\rustdesk.exe`
-Il faut donc s'assurer que RustDesk est installé dans l'un de ces 2 emplacements.
+
+Assurez-vous que RustDesk est installé dans l'un de ces emplacements.
+
+Les 2 versions utilisent le carnet d'adresses suivant :
+- `C:\Windows\address_book.xlsx`
+
+Assurez-vous que le carnet d'adresses est disponible dans cet emplacement sous le bon format de colonnes : 
+- `Client`
+- `Nom du PC`
+- `Identifiant`
 
 ## Contribuer
 
