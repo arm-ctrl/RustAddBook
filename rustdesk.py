@@ -33,10 +33,12 @@ def load_address_book(file_path):
         print(f"Erreur lors de la lecture du fichier Excel : {str(e)}")
         return None
 
-# Fonction pour connecter à un appareil
+# Fonction pour se connecter à un appareil
 def connect_to_device(rustdesk_path, device_id, password):
-    command = f'"{rustdesk_path}" --connect {device_id} --password {password}'
+    # Utiliser 'start' pour Windows afin d'exécuter RustDesk en arrière-plan
+    command = f'start "" "{rustdesk_path}" --connect {device_id} --password {password}'
     os.system(command)
+    print(Fore.GREEN + "\nConnexion initiée avec succès!")
 
 # Fonction pour afficher les appareils par groupe
 def display_grouped_devices(address_book):
@@ -98,13 +100,13 @@ if address_book is not None:
             index = int(choice)
             if index in devices_dict:
                 device = devices_dict[index]
-                if RUSTDESK_PATH is not None:
-                    # Demander le mot de passe à l'utilisateur avec getpass
-                    print(Fore.LIGHTMAGENTA_EX + "Veuillez entrer le mot de passe pour l'appareil sélectionné : ", end='')
-                    password = getpass('')
-                    connect_to_device(RUSTDESK_PATH, device['Identifiant'], password)
-                else:
-                    print("Impossible de se connecter, aucun chemin valide trouvé pour RustDesk.")
+                password = getpass(Fore.LIGHTMAGENTA_EX + "Veuillez entrer le mot de passe pour l'appareil sélectionné : ")
+                connect_to_device(RUSTDESK_PATH, device['Identifiant'], password)  # Connectez-vous à l'appareil
+                
+                # Demander si l'utilisateur souhaite se reconnecter
+                reconnect = input("Souhaitez-vous vous reconnecter à un autre appareil ? (o/n) : ")
+                if reconnect.lower() != 'o':
+                    break
             else:
                 print(Fore.RED + "Numéro d'appareil invalide. Veuillez réessayer.")
         except ValueError:
