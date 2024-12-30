@@ -100,11 +100,18 @@ if address_book is not None:
             index = int(choice)
             if index in devices_dict:
                 device = devices_dict[index]
-                password = getpass(Fore.LIGHTMAGENTA_EX + "Veuillez entrer le mot de passe pour l'appareil sélectionné : ")
+                # Boucle pour demander le mot de passe jusqu'à ce qu'il soit valide
+                while True:
+                    password = getpass(Fore.LIGHTMAGENTA_EX + "Veuillez entrer le mot de passe pour l'appareil sélectionné : ")
+                    if not password.strip():
+                        print(Fore.RED + "Le mot de passe ne peut pas être vide !")
+                        continue
+                    break
+                
                 connect_to_device(RUSTDESK_PATH, device['Identifiant'], password)  # Connectez-vous à l'appareil
                 
                 # Demander si l'utilisateur souhaite se reconnecter
-                reconnect = input("Souhaitez-vous vous reconnecter à un autre appareil ? (o/n) : ")
+                reconnect = input("Souhaitez-vous vous reconnecter à un autre appareil ? (O/n) : ") or 'o'
                 if reconnect.lower() != 'o':
                     break
             else:
