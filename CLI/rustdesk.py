@@ -3,53 +3,53 @@ import pandas as pd
 from colorama import init, Fore, Style
 from getpass import getpass
 
-# Initialiser colorama
+# Initialize colorama
 init(autoreset=True)
 
-# Fonction pour afficher un en-tête
+# Function to display a header
 def print_header(title):
     print(Fore.WHITE + title)
     print(Fore.YELLOW + "-" * len(title))
 
-# Affichage d'un en-tête au début du script
-print_header("Bienvenue dans le gestionnaire de connexions RustDesk")
-print(Fore.LIGHTWHITE_EX + "Chargement du carnet d'adresses...\n")
+# Display a header at the beginning of the script
+print_header("Welcome to the RustDesk Connection Manager")
+print(Fore.LIGHTWHITE_EX + "Loading address book...\n")
 
-# Fonction pour lire le carnet d'adresses
+# Function to read the address book
 def load_address_book(file_path):
     try:
-        # Lire le fichier Excel
+        # Read the Excel file
         df = pd.read_excel(file_path)
-        # Vérifier que toutes les colonnes nécessaires sont présentes
-        required_columns = ['Client', 'Nom du PC', 'Identifiant']
+        # Check that all required columns are present
+        required_columns = ['Client', 'Hostname', 'Rustdesk_ID']
         if not all(col in df.columns for col in required_columns):
-            print("Format du fichier Excel incorrect. Les colonnes requises sont:", required_columns)
+            print("Incorrect Excel file format. Required columns are:", required_columns)
             return None
         return df
     except FileNotFoundError:
-        print(f"Erreur : Le fichier '{file_path}' n'a pas été trouvé. Veuillez vérifier que le fichier existe à cet emplacement.")
+        print(f"Error: The file '{file_path}' was not found. Please check that the file exists at this location.")
         return None
     except Exception as e:
-        print(f"Erreur lors de la lecture du fichier Excel : {str(e)}")
+        print(f"Error reading the Excel file: {str(e)}")
         return None
 
-# Fonction pour se connecter à un appareil
+# Function to connect to a device
 def connect_to_device(rustdesk_path, device_id, password):
-    # Utiliser 'start' pour Windows afin d'exécuter RustDesk en arrière-plan
+    # Use 'start' for Windows to run RustDesk in the background
     command = f'start "" "{rustdesk_path}" --connect {device_id} --password {password}'
     os.system(command)
-    print(Fore.GREEN + "\nConnexion initiée avec succès!")
+    print(Fore.GREEN + "\nConnection initiated successfully!")
 
-# Fonction pour afficher les appareils par groupe
+# Function to display devices by group
 def display_grouped_devices(address_book):
-    # Grouper les appareils par client
+    # Group devices by client
     grouped = address_book.groupby('Client')
     
-    # Dictionnaire pour stocker les appareils par index
+    # Dictionary to store devices by index
     devices_dict = {}
     current_index = 1
     
-    print("\n" + Fore.GREEN + "Liste des appareils par client:")
+    print("\n" + Fore.GREEN + "List of devices by client:")
     print(Fore.YELLOW + "-" * 50)
     
     for client_name, group in grouped:
@@ -57,41 +57,41 @@ def display_grouped_devices(address_book):
         print(Fore.YELLOW + "-" * 20)
         
         for _, row in group.iterrows():
-            print(f"{current_index}. {row['Nom du PC']} (ID: {row['Identifiant']})")
+            print(f"{current_index}. {row['Hostname']} (ID: {row['Rustdesk_ID']})")
             devices_dict[current_index] = row
             current_index += 1
         
     return devices_dict
 
-# Chemins possibles pour l'exécutable RustDesk
+# Possible paths for the RustDesk executable
 RUSTDESK_PATH_1 = r"C:\Program Files\RustDesk\rustdesk.exe"
 RUSTDESK_PATH_2 = r"C:\Program Files (x86)\RustDesk\rustdesk.exe"
 
-# Vérifier quel chemin existe
+# Check which path exists
 if os.path.exists(RUSTDESK_PATH_1):
     RUSTDESK_PATH = RUSTDESK_PATH_1
 elif os.path.exists(RUSTDESK_PATH_2):
     RUSTDESK_PATH = RUSTDESK_PATH_2
 else:
-    print("Aucun chemin valide trouvé pour RustDesk.")
+    print("No valid path found for RustDesk.")
     RUSTDESK_PATH = None
 
-# Chemin du fichier Excel où il y a le carnet d'adresses
+# Path to the Excel file containing the address book
 ADDRESS_BOOK_FILE = r"C:\Windows\address_book.xlsx"
 
-# Chargement du carnet d'adresses
+# Load the address book
 address_book = load_address_book(ADDRESS_BOOK_FILE)
 
 if address_book is not None:
-    print(Fore.GREEN + "Carnet d'adresses chargé avec succès !")
+    print(Fore.GREEN + "Address book loaded successfully!")
     
-    # Boucle principale
+    # Main loop
     while True:
-        # Afficher les appareils groupés et obtenir le dictionnaire des appareils
+        # Display grouped devices and get the device dictionary
         devices_dict = display_grouped_devices(address_book)
         
-        # Demander à l'utilisateur de choisir un appareil
-        choice = input("\n" + Fore.CYAN + "Entrez le numéro de l'appareil à connecter (ou 'q' pour quitter) : ")
+        # Ask the user to choose a device
+        choice = input("\n" + Fore.CYAN + "Enter the number of the device to connect to (or 'q' to quit): ")
         
         if choice.lower() == 'q':
             break
@@ -100,21 +100,21 @@ if address_book is not None:
             index = int(choice)
             if index in devices_dict:
                 device = devices_dict[index]
-                # Boucle pour demander le mot de passe jusqu'à ce qu'il soit valide
+                # Loop to ask for the password until it is valid
                 while True:
-                    password = getpass(Fore.LIGHTMAGENTA_EX + "Veuillez entrer le mot de passe pour l'appareil sélectionné : ")
+                    password = getpass(Fore.LIGHTMAGENTA_EX + "Please enter the password for the selected device: ")
                     if not password.strip():
-                        print(Fore.RED + "Le mot de passe ne peut pas être vide !")
+                        print(Fore.RED + "The password cannot be empty!")
                         continue
                     break
                 
-                connect_to_device(RUSTDESK_PATH, device['Identifiant'], password)  # Connectez-vous à l'appareil
+                connect_to_device(RUSTDESK_PATH, device['Rustdesk_ID'], password)  # Connect to the device
                 
-                # Demander si l'utilisateur souhaite se reconnecter
-                reconnect = input("Souhaitez-vous vous reconnecter à un autre appareil ? (O/n) : ") or 'o'
-                if reconnect.lower() != 'o':
+                # Ask if the user wants to reconnect
+                reconnect = input("Do you want to reconnect to another device? (Y/n): ") or 'y'
+                if reconnect.lower() != 'y':
                     break
             else:
-                print(Fore.RED + "Numéro d'appareil invalide. Veuillez réessayer.")
+                print(Fore.RED + "Invalid device number. Please try again.")
         except ValueError:
-            print(Fore.RED + "Entrée invalide. Veuillez entrer un numéro ou 'q' pour quitter.")
+            print(Fore.RED + "Invalid input. Please enter a number or 'q' to quit.")

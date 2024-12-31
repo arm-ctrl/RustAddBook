@@ -1,67 +1,69 @@
-# Interface RustDesk
+# RustDesk Interface
 
-Une interface graphique moderne pour RustDesk permettant de gérer les connexions à distance et de suivre l'historique des connexions.
+A modern graphical interface for RustDesk to manage remote connections and track connection history.
 
-## Fonctionnalités
+## Features
 
-- Interface graphique moderne avec thème sombre
-- Gestion des connexions à distance via RustDesk
-- Carnet d'adresses des clients et appareils
-- Historique des connexions avec filtrage par date et heure
-- Statistiques sur les connexions (nombre total, clients uniques, appareils)
-- Export des données vers Excel
-- Gestion automatique des logs de connexion
+- Modern graphical interface with dark theme
+- Remote connection management via RustDesk
+- Client and device address book
+- Connection history with date and time filtering
+- Connection statistics (total count, unique clients, devices)
+- Data export to Excel
+- Automatic connection logging
+- Multi-language support (English, French, Spanish)
 
-## Prérequis
+## Prerequisites
 
 - Python 3
-- RustDesk installé sur le système et configuré avec le Server ID et le Key.
-- Fichier `address_book.xlsx` dans `C:\Windows\` (format requis : colonnes 'Client', 'Nom du PC', 'Identifiant')
+- RustDesk installed and configured with Server ID and Key
+- `address_book.xlsx` file in `C:\Windows\` (required format: columns 'Client', 'Hostname', 'Rustdesk_ID')
 
-## Installation des dépendances
+## Installing Dependencies
 
 ```bash
 pip install customtkinter pandas openpyxl numpy
 ```
 
-## Utilisation
+## Usage
 
-### Depuis le code source
+### From Source Code
 ```bash
 python rustdesk_modern.py
 ```
 
-Si vous effectuez une mise à jour dans le code, vous pouvez utiliser la commande suivante pour regénerer l'exécutable :
+If you make changes to the code, you can regenerate the executable using:
 ```bash
 pyinstaller --onefile --windowed --clean rustdesk_modern.py
 ```
 
-### Version exécutable
-Téléchargez la dernière version de l'exécutable et lancez-le directement.
+### Executable Version
+Download the latest version of the executable and run it directly.
 
-## Structure des fichiers
+## File Structure
 
-- `rustdesk_modern.py` : Application principale
-- `RustDesk Connector.exe` : Application avec interface graphique
+- `rustdesk_modern.py`: Main application
+- `RustDesk Connector.exe`: GUI application
 
-## Fonctionnement
+## How It Works
 
-1. L'application vérifie la présence du carnet d'adresses et de RustDesk
-2. Les clients sont affichés dans la colonne de gauche
-3. Sélectionnez un client pour voir ses appareils
-4. Cliquez sur un appareil, puis saisissez le mot de passe pour initier une connexion
-5. L'historique des connexions est automatiquement enregistré
+1. The application checks for the presence of the address book and RustDesk
+2. Clients are displayed in the left column
+3. Select a client to view their devices
+4. Click on a device, then enter the password to initiate a connection
+5. Connection history is automatically logged
 
-## Stockage des données
+## Data Storage
 
-- Carnet d'adresses : `C:\Windows\address_book.xlsx`
-- Historique des connexions : 
-  - Windows : `%APPDATA%\RustDeskInterface\logs\connection_history.json`
-  - macOS/Linux : `~/.rustdeskinterface/logs/connection_history.json`
+- Address Book: `C:\Windows\address_book.xlsx`
+- Connection History: 
+  - Windows: `%APPDATA%\RustDeskInterface\logs\connection_history.json`
+  - macOS/Linux: `~/.rustdeskinterface/logs/connection_history.json`
 
 ## Notes
 
-- L'interface utilise customtkinter pour un design moderne
-- Les logs sont automatiquement gérés et peuvent être exportés
-- L'historique peut être filtré par date et heure
-- Les statistiques sont mises à jour en temps réel
+- The interface uses customtkinter for a modern design
+- Logs are automatically managed and can be exported
+- History can be filtered by date and time
+- Statistics are updated in real-time
+- Multi-language support (English, French, Spanish)

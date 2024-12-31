@@ -1,42 +1,69 @@
-# Gestionnaire de Carnet d'Adresses pour RustDesk
+# RustAddBook
 
-Ce projet est un gestionnaire de connexions pour RustDesk, permettant de gérer facilement les connexions à différents appareils à partir d'un carnet d'adresses stocké dans un fichier Excel en local.
+A modern graphical interface for RustDesk to manage remote connections and track connection history.
 
-## Fonctionnalités
+## Features
 
-- Chargement des clients et de leurs appareils à partir d'un fichier Excel
-- Interface graphique moderne et intuitive
-- Sélection facile des clients et des appareils
-- Saisie sécurisée des mots de passe
-- Connexion rapide aux appareils distants
+- Modern graphical interface with dark theme
+- Remote connection management via RustDesk
+- Client and device address book
+- Connection history with date and time filtering
+- Connection statistics (total count, unique clients, devices)
+- Data export to Excel
+- Automatic connection logging
+- Multi-language support (English, French, Spanish)
 
-### Version Interface Graphique (Recommandée)
-Téléchargez et exécutez la version .exe disponible dans "Interface graphique"
+## Prerequisites
 
-### Version Console
-1) Si vous préférez utiliser la version console, téléchargez et exécutez la version le "rustdesk.py" disponible dans "CLI" :
+- Python 3
+- RustDesk installed and configured with Server ID and Key
+- `address_book.xlsx` file in `C:\Windows\` (required format: columns 'Client', 'Hostname', 'Rustdesk_ID')
 
-2) 
+## Installing Dependencies
+
 ```bash
-python rustdesk.py
+pip install customtkinter pandas openpyxl numpy
 ```
 
-## Configuration
+## Usage
 
-Les 2 versions recherchent l'exécutable RustDesk dans les emplacements suivants :
-- `C:\Program Files\RustDesk\rustdesk.exe`
-- `C:\Program Files (x86)\RustDesk\rustdesk.exe`
+### From Source Code
+```bash
+python rustdesk_modern.py
+```
 
-Assurez-vous que RustDesk est installé dans l'un de ces emplacements.
+If you make changes to the code, you can regenerate the executable using:
+```bash
+pyinstaller --onefile --windowed --clean rustdesk_modern.py
+```
 
-Les 2 versions utilisent le carnet d'adresses suivant :
-- `C:\Windows\address_book.xlsx`
+### Executable Version
+Download the latest version of the executable and run it directly.
 
-Assurez-vous que le carnet d'adresses est disponible dans cet emplacement sous le bon format de colonnes : 
-- `Client`
-- `Nom du PC`
-- `Identifiant`
+## File Structure
 
-## Contribuer
+- `rustdesk_modern.py`: Main application
+- `RustDesk Connector.exe`: GUI application
 
-Les contributions sont les bienvenues ! N'hésitez pas à soumettre des demandes de tirage (pull requests) pour des améliorations ou des corrections.
+## How It Works
+
+1. The application checks for the presence of the address book and RustDesk
+2. Clients are displayed in the left column
+3. Select a client to view their devices
+4. Click on a device, then enter the password to initiate a connection
+5. Connection history is automatically logged
+
+## Data Storage
+
+- Address Book: `C:\Windows\address_book.xlsx`
+- Connection History: 
+  - Windows: `%APPDATA%\RustDeskInterface\logs\connection_history.json`
+  - macOS/Linux: `~/.rustdeskinterface/logs/connection_history.json`
+
+## Notes
+
+- The interface uses customtkinter for a modern design
+- Logs are automatically managed and can be exported
+- History can be filtered by date and time
+- Statistics are updated in real-time
+- Multi-language support (English, French, Spanish)

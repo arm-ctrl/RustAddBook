@@ -1,53 +1,48 @@
 # RustDesk CLI
 
-Une interface en ligne de commande pour RustDesk permettant de gérer facilement les connexions à distance.
+A command-line interface for RustDesk, allowing users to manage remote connections easily.
 
-## Fonctionnalités
+## Features
 
-- Interface en ligne de commande simple et efficace
-- Gestion des connexions à distance via RustDesk
-- Lecture du carnet d'adresses Excel
-- Affichage coloré pour une meilleure lisibilité
-- Protection par mot de passe pour certaines fonctionnalités
+- Simple and efficient command-line interface
+- Remote connection management via RustDesk
+- Reading of Excel address book
+- Colorful display for better readability
+- Password protection for certain features
 
-## Prérequis
+## Prerequisites
 
 - Python 3
-- RustDesk installé sur le système
-- Fichier `address_book.xlsx` dans `C:\Windows\` (format requis : colonnes 'Client', 'Nom du PC', 'Identifiant')
+- RustDesk installed on the system
+- `address_book.xlsx` file in `C:\Windows\` (required format: columns 'Client', 'Hostname', 'Rustdesk_ID')
 
-## Installation des dépendances
+## Installing Dependencies
 
 ```bash
 pip install pandas colorama openpyxl
 ```
 
-## Utilisation
+## Usage
 
 ```bash
 python rustdesk.py
 ```
 
-## Structure des fichiers
+## File Structure
 
-- `rustdesk.py` : Script principal en ligne de commande
+- `rustdesk.py` : Main command-line script
 
-## Fonctionnement
+## Functioning
 
-1. Le script vérifie la présence du carnet d'adresses
-2. Liste des clients affichée avec un code couleur
-3. Sélection du client par numéro
-4. Choix de l'appareil à connecter
-5. Lancement automatique de la connexion RustDesk
-
-## Stockage des données
-
-- Carnet d'adresses : `C:\Windows\address_book.xlsx`
-  - Format : Excel avec colonnes 'Client', 'Nom du PC', 'Identifiant'
+1. The script checks for the presence of the address book
+2. List of clients displayed with color code
+3. Client selection by number
+4. Choice of device to connect to
+5. Automatic launch of RustDesk connection
 
 ## Notes
 
-- Utilisation simple via ligne de commande
-- Affichage coloré avec colorama pour une meilleure lisibilité
-- Protection par mot de passe des fonctions sensibles
-- Version en ligne de commande, complément de la version graphique moderne
+- Simple usage via command-line
+- Colorful display with colorama for better readability
+- Password protection of sensitive functions
+- Command-line version, complement to the modern graphical version
