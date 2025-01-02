@@ -731,7 +731,7 @@ class ModernRustDeskGUI:
                 os.path.expanduser("~/.rustaddbook/address_book.xlsx")
             ]
         else:
-            self.show_status(f"Unsupported operating system: {system}", "error")
+            self.show_error_and_exit(f"Unsupported operating system: {system}")
             return None
 
         # Check each path
@@ -739,7 +739,23 @@ class ModernRustDeskGUI:
             if os.path.exists(path):
                 return path
                 
-        self.show_status(f"Address book was not found on your system ({system})", "error")
+        # Create error message based on OS
+        if system == "windows":
+            error_msg = "Address book not found!\nPlease make sure the file exists at: C:\\Windows\\address_book.xlsx"
+        elif system == "darwin":
+            error_msg = "Address book not found!\nPlease place the file in one of these locations:\n" \
+                      "- /Applications/RustAddBook/address_book.xlsx\n" \
+                      "- ~/Library/Application Support/RustAddBook/address_book.xlsx"
+        elif system == "linux":
+            error_msg = "Address book (address_book.xlsx) not found!\n\n" \
+                      "Please place the file in one of these locations:\n" \
+                      "1. ~/rustaddbook/address_book.xlsx\n" \
+                      "   (Example: /home/*user*/rustaddbook/address_book.xlsx)\n\n" \
+                      "2. ~/.rustaddbook/address_book.xlsx\n" \
+                      "   (Example: /home/*user*/.rustaddbook/address_book.xlsx)\n\n" \
+                      "Note: Replace 'user' with your username"
+        
+        self.show_error_and_exit(error_msg)
         return None
 
     def create_interface(self):
