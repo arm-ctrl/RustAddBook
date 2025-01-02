@@ -37,9 +37,13 @@ pip install customtkinter tkcalendar pandas openpyxl numpy psutil psutils
 python rustdesk_modern.py
 ```
 
-If you make changes to the code, you can regenerate the executable using:
+To generate the executable run:
 ```bash
 pyinstaller --onefile --windowed --clean rustdesk_modern.py
+```
+or
+```bash
+python -m PyInstaller --onefile --windowed --clean rustdesk_modern.py
 ```
 
 ### Executable Version
