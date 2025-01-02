@@ -649,9 +649,9 @@ class ModernRustDeskGUI:
                               "- ~/Library/Application Support/RustAddBook/address_book.xlsx"
                 elif system == "linux":
                     error_msg = "Address book not found!\nPlease place the file in one of these locations:\n" \
-                              "- /etc/rustaddbook/address_book.xlsx\n" \
-                              "- ~/.local/share/rustaddbook/address_book.xlsx\n" \
-                              "- ~/.rustaddbook/address_book.xlsx"
+                              "- ~/rustaddbook/address_book.xlsx\n" \
+                              "- ~/.rustaddbook/address_book.xlsx\n" \
+                              "\nNote: ~ represents your home directory"
                 else:
                     error_msg = "Address book not found and unsupported operating system!"
                 self.show_error_and_exit(error_msg)
@@ -717,6 +717,7 @@ class ModernRustDeskGUI:
         """Get the path to address_book.xlsx based on the operating system."""
         system = platform.system().lower()
         
+        # Define paths for different operating systems
         if system == "windows":
             paths = [r"C:\Windows\address_book.xlsx"]
         elif system == "darwin":  # macOS
@@ -726,8 +727,7 @@ class ModernRustDeskGUI:
             ]
         elif system == "linux":
             paths = [
-                "/etc/rustaddbook/address_book.xlsx",
-                os.path.expanduser("~/.local/share/rustaddbook/address_book.xlsx"),
+                os.path.expanduser("~/rustaddbook/address_book.xlsx"),
                 os.path.expanduser("~/.rustaddbook/address_book.xlsx")
             ]
         else:
@@ -738,8 +738,8 @@ class ModernRustDeskGUI:
         for path in paths:
             if os.path.exists(path):
                 return path
-        
-        # If no file is found, return None
+                
+        self.show_status(f"Address book was not found on your system ({system})", "error")
         return None
 
     def create_interface(self):
