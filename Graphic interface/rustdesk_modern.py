@@ -23,19 +23,19 @@ TRANSLATIONS = {
         'connection_status': "État de la connexion : ",
         'connected': "Connecté",
         'disconnected': "Déconnecté",
-        'select_client': "Client",
-        'select_device': "Appareils",
+        'select_client': "Sélectionner un client",
+        'select_device': "Sélectionner un appareil",
         'select_device_of': "Appareils de",
         'connect_button': "Se connecter",
         'password_prompt': "Mot de passe",
-        'error_title': "Erreur",
-        'success': "Succès",
         'language': "Langue",
         'french': "Français",
         'english': "Anglais",
         'spanish': "Espagnol",
         'save_settings': "Enregistrer",
         'cancel': "Annuler",
+        'error_title': "Erreur",
+        'success': "Succès",
         'settings_saved': "Paramètres enregistrés",
         'restart_required': "Redémarrage requis",
         'restart_message': "Veuillez redémarrer l'application pour appliquer les changements",
@@ -57,7 +57,6 @@ TRANSLATIONS = {
         'no_device_selected': "Aucun appareil sélectionné",
         'connection_error': "Erreur de connexion",
         'address_book_error': "Erreur de carnet d'adresses",
-        'address_book_missing': "Carnet d'adresses introuvable !\n\nMerci de vérifier que le fichier 'address_book.xlsx' est bien présent dans le dossier C:\\Windows",
         'ready': "Prêt",
         'device_selected': "Appareil sélectionné :",
         'help': "Aide",
@@ -66,6 +65,9 @@ TRANSLATIONS = {
         'total_connections': "Connexions totales",
         'dark_mode': "Mode sombre",
         'devices_count': "{} appareils",
+        'no_history_data': "Aucune donnée à exporter dans l'historique",
+        'export_success': "L'historique a été exporté avec succès vers :\n{}",
+        'export_error': "Erreur lors de l'exportation de l'historique :\n{}"
     },
     'en': {
         'title': "RustAddBook",
@@ -76,18 +78,18 @@ TRANSLATIONS = {
         'connected': "Connected",
         'disconnected': "Disconnected",
         'select_client': "Select a client",
-        'select_device': "Devices",
+        'select_device': "Select a device",
         'select_device_of': "Devices of",
         'connect_button': "Connect",
         'password_prompt': "Password",
-        'error_title': "Error",
-        'success': "Success",
         'language': "Language",
         'french': "French",
         'english': "English",
         'spanish': "Spanish",
         'save_settings': "Save",
         'cancel': "Cancel",
+        'error_title': "Error",
+        'success': "Success",
         'settings_saved': "Settings saved",
         'restart_required': "Restart required",
         'restart_message': "Please restart the application to apply changes",
@@ -109,7 +111,6 @@ TRANSLATIONS = {
         'no_device_selected': "No device selected",
         'connection_error': "Connection error",
         'address_book_error': "Address book error",
-        'address_book_missing': "Address book not found!\n\nPlease verify that the file 'address_book.xlsx' is present in the C:\\Windows folder",
         'ready': "Ready",
         'device_selected': "Selected device:",
         'help': "Help",
@@ -118,27 +119,31 @@ TRANSLATIONS = {
         'total_connections': "Total connections",
         'dark_mode': "Dark mode",
         'devices_count': "{} devices",
+        'no_history_data': "No data to export in history",
+        'export_success': "History has been successfully exported to:\n{}",
+        'export_error': "Error exporting history:\n{}"
     },
     'es': {
         'title': "RustAddBook",
         'history': "Historial",
         'settings': "Ajustes",
         'search_placeholder': "Buscar cliente...",
+        'connection_status': "Estado de la conexión: ",
         'connected': "Conectado",
         'disconnected': "Desconectado",
-        'select_client': "Cliente",
-        'select_device': "Dispositivos",
+        'select_client': "Seleccionar cliente",
+        'select_device': "Seleccionar dispositivo",
         'select_device_of': "Dispositivos de",
         'connect_button': "Conectar",
         'password_prompt': "Contraseña",
-        'error_title': "Error",
-        'connection_status': "Conectando a",
         'language': "Idioma",
         'french': "Francés",
         'english': "Inglés",
         'spanish': "Español",
         'save_settings': "Guardar",
         'cancel': "Cancelar",
+        'error_title': "Error",
+        'success': "Éxito",
         'settings_saved': "Ajustes guardados",
         'restart_required': "Reinicio necesario",
         'restart_message': "Por favor, reinicie la aplicación para aplicar los cambios",
@@ -160,7 +165,6 @@ TRANSLATIONS = {
         'no_device_selected': "Ningún dispositivo seleccionado",
         'connection_error': "Error de conexión",
         'address_book_error': "Error en la libreta de direcciones",
-        'address_book_missing': "¡Libreta de direcciones no encontrada!\n\nPor favor, verifique que el archivo 'address_book.xlsx' está presente en la carpeta C:\\Windows",
         'ready': "Listo",
         'device_selected': "Dispositivo seleccionado:",
         'help': "Ayuda",
@@ -168,7 +172,10 @@ TRANSLATIONS = {
         'most_connected_device': "Dispositivo más conectado",
         'total_connections': "Conexiones totales",
         'dark_mode': "Modo oscuro",
-        'devices_count': "{} dispositivos"
+        'devices_count': "{} dispositivos",
+        'no_history_data': "No hay datos para exportar en el historial",
+        'export_success': "El historial se ha exportado correctamente a:\n{}",
+        'export_error': "Error al exportar el historial:\n{}"
     }
 }
 
@@ -400,34 +407,57 @@ class HistoryWindow:
         filters_frame = ctk.CTkFrame(self.window)
         filters_frame.pack(fill="x", padx=10, pady=5)
 
-        # Date filter
-        date_frame = ctk.CTkFrame(filters_frame, fg_color="transparent")
-        date_frame.pack(side="left", padx=10)
+        # Start date filter
+        start_date_frame = ctk.CTkFrame(filters_frame, fg_color="transparent")
+        start_date_frame.pack(side="left", padx=10)
 
-        ctk.CTkLabel(date_frame, 
-                    text=TRANSLATIONS[self.current_language]['filter_date']).pack(side="left", padx=5)
+        ctk.CTkLabel(start_date_frame, 
+                    text="Du").pack(side="left", padx=5)
 
-        self.start_date = DateEntry(date_frame, width=12, background='darkblue',
+        self.start_date = DateEntry(start_date_frame, width=12, background='darkblue',
                                   foreground='white', borderwidth=2,
                                   date_pattern='dd/mm/y')
         self.start_date.pack(side="left", padx=5)
 
-        # Time filter
-        time_frame = ctk.CTkFrame(filters_frame, fg_color="transparent")
-        time_frame.pack(side="left", padx=10)
+        # Start time filter
+        start_time_frame = ctk.CTkFrame(start_date_frame, fg_color="transparent")
+        start_time_frame.pack(side="left", padx=5)
 
-        ctk.CTkLabel(time_frame, 
-                    text=TRANSLATIONS[self.current_language]['filter_time']).pack(side="left", padx=5)
-
-        self.start_hour = ttk.Spinbox(time_frame, from_=0, to=23, width=3, 
+        self.start_hour = ttk.Spinbox(start_time_frame, from_=0, to=23, width=3, 
                                     format="%02.0f")
         self.start_hour.pack(side="left", padx=2)
         
-        ctk.CTkLabel(time_frame, text=":").pack(side="left")
+        ctk.CTkLabel(start_time_frame, text=":").pack(side="left")
         
-        self.start_minute = ttk.Spinbox(time_frame, from_=0, to=59, width=3,
+        self.start_minute = ttk.Spinbox(start_time_frame, from_=0, to=59, width=3,
                                       format="%02.0f")
         self.start_minute.pack(side="left", padx=2)
+
+        # End date filter
+        end_date_frame = ctk.CTkFrame(filters_frame, fg_color="transparent")
+        end_date_frame.pack(side="left", padx=10)
+
+        ctk.CTkLabel(end_date_frame, 
+                    text="Au").pack(side="left", padx=5)
+
+        self.end_date = DateEntry(end_date_frame, width=12, background='darkblue',
+                                foreground='white', borderwidth=2,
+                                date_pattern='dd/mm/y')
+        self.end_date.pack(side="left", padx=5)
+
+        # End time filter
+        end_time_frame = ctk.CTkFrame(end_date_frame, fg_color="transparent")
+        end_time_frame.pack(side="left", padx=5)
+
+        self.end_hour = ttk.Spinbox(end_time_frame, from_=0, to=23, width=3, 
+                                  format="%02.0f")
+        self.end_hour.pack(side="left", padx=2)
+        
+        ctk.CTkLabel(end_time_frame, text=":").pack(side="left")
+        
+        self.end_minute = ttk.Spinbox(end_time_frame, from_=0, to=59, width=3,
+                                    format="%02.0f")
+        self.end_minute.pack(side="left", padx=2)
 
         # Filter buttons
         buttons_frame = ctk.CTkFrame(filters_frame, fg_color="transparent")
@@ -449,20 +479,22 @@ class HistoryWindow:
         self.history_frame = ctk.CTkScrollableFrame(self.window)
         self.history_frame.pack(fill="both", expand=True, padx=10, pady=5)
 
+        # Configure grid for the scrollable frame
+        self.history_frame.grid_columnconfigure((0,1,2,3,4), weight=1)
+
         # Create table headers
         headers = ['date', 'time', 'client', 'device_name', 'device_id']
-        header_frame = ctk.CTkFrame(self.history_frame, fg_color="transparent")
-        header_frame.pack(fill="x", pady=2)
-
         for i, header in enumerate(headers):
-            ctk.CTkLabel(header_frame,
-                        text=TRANSLATIONS[self.current_language][header],
-                        font=("Roboto", 12, "bold")).pack(side="left", expand=True)
+            label = ctk.CTkLabel(self.history_frame,
+                            text=TRANSLATIONS[self.current_language][header],
+                            font=("Roboto", 12, "bold"))
+            label.grid(row=0, column=i, sticky="ew", padx=5)
 
-    def load_history(self):
+    def load_history(self, start_datetime=None, end_datetime=None):
         # Clear existing entries
-        for widget in self.history_frame.winfo_children()[1:]:
-            widget.destroy()
+        for widget in self.history_frame.winfo_children():
+            if int(widget.grid_info()['row']) > 0:  # Preserve headers
+                widget.destroy()
 
         # Get connection history
         history = self.connection_logger.get_connection_history()
@@ -470,29 +502,62 @@ class HistoryWindow:
         # Sort by timestamp (newest first)
         history.sort(key=lambda x: x['timestamp'], reverse=True)
 
-        # Add entries to table
-        for entry in history:
-            entry_frame = ctk.CTkFrame(self.history_frame, fg_color="transparent")
-            entry_frame.pack(fill="x", pady=2)
+        # Filter by date range if specified
+        if start_datetime or end_datetime:
+            filtered_history = []
+            for entry in history:
+                entry_datetime = datetime.strptime(entry['timestamp'], '%Y-%m-%dT%H:%M:%S.%f')
+                if start_datetime and entry_datetime < start_datetime:
+                    continue
+                if end_datetime and entry_datetime > end_datetime:
+                    continue
+                filtered_history.append(entry)
+            history = filtered_history
 
+        # Add entries to table
+        for row_idx, entry in enumerate(history, start=1):
             timestamp = datetime.strptime(entry['timestamp'], '%Y-%m-%dT%H:%M:%S.%f')
             
-            ctk.CTkLabel(entry_frame, text=timestamp.strftime("%Y-%m-%d")).pack(side="left", expand=True)
-            ctk.CTkLabel(entry_frame, text=timestamp.strftime("%H:%M:%S")).pack(side="left", expand=True)
-            ctk.CTkLabel(entry_frame, text=entry['client']).pack(side="left", expand=True)
-            ctk.CTkLabel(entry_frame, text=entry['device_name']).pack(side="left", expand=True)
-            ctk.CTkLabel(entry_frame, text=entry['device_id']).pack(side="left", expand=True)
+            # Create labels with grid
+            date_label = ctk.CTkLabel(self.history_frame, text=timestamp.strftime("%Y-%m-%d"))
+            date_label.grid(row=row_idx, column=0, sticky="ew", padx=5, pady=2)
+            
+            time_label = ctk.CTkLabel(self.history_frame, text=timestamp.strftime("%H:%M:%S"))
+            time_label.grid(row=row_idx, column=1, sticky="ew", padx=5, pady=2)
+            
+            client_label = ctk.CTkLabel(self.history_frame, text=entry['client'])
+            client_label.grid(row=row_idx, column=2, sticky="ew", padx=5, pady=2)
+            
+            device_name_label = ctk.CTkLabel(self.history_frame, text=entry['device_name'])
+            device_name_label.grid(row=row_idx, column=3, sticky="ew", padx=5, pady=2)
+            
+            device_id_label = ctk.CTkLabel(self.history_frame, text=entry['device_id'])
+            device_id_label.grid(row=row_idx, column=4, sticky="ew", padx=5, pady=2)
 
     def reset_filters(self):
         # Reset filters
-        self.start_date.set_date(datetime.now())
+        current_date = datetime.now()
+        self.start_date.set_date(current_date)
+        self.end_date.set_date(current_date)
         self.start_hour.set("00")
         self.start_minute.set("00")
+        self.end_hour.set("23")
+        self.end_minute.set("59")
         
         # Reload history
         self.load_history()
 
-    def get_datetime_from_widgets(self, date_widget, hour_widget, minute_widget):
+    def apply_date_filter(self):
+        # Apply date filter
+        start_datetime = self.get_datetime_from_widgets(
+            self.start_date, self.start_hour, self.start_minute)
+        end_datetime = self.get_datetime_from_widgets(
+            self.end_date, self.end_hour, self.end_minute, is_end=True)
+        
+        # Reload history with filter
+        self.load_history(start_datetime, end_datetime)
+
+    def get_datetime_from_widgets(self, date_widget, hour_widget, minute_widget, is_end=False):
         # Get datetime from widgets
         date = date_widget.get_date()
         try:
@@ -501,25 +566,20 @@ class HistoryWindow:
             return datetime.combine(date, time(hour=min(hour, 23), minute=min(minute, 59)))
         except (ValueError, TypeError):
             # If error, use 00:00 for start or 23:59 for end
-            if hour_widget == self.start_hour:
+            if not is_end:
                 return datetime.combine(date, time(0, 0))
             else:
                 return datetime.combine(date, time(23, 59))
-
-    def apply_date_filter(self):
-        # Apply date filter
-        start_datetime = self.get_datetime_from_widgets(
-            self.start_date, self.start_hour, self.start_minute)
-        
-        # Reload history with filter
-        self.load_history(start_datetime)
 
     def export_to_excel(self):
         # Export to Excel
         try:
             history = self.connection_logger.get_connection_history()
             if not history:
-                messagebox.showwarning(TRANSLATIONS[self.current_language]['error_title'], TRANSLATIONS[self.current_language]['no_device_selected'])
+                messagebox.showwarning(
+                    TRANSLATIONS[self.current_language]['error_title'],
+                    TRANSLATIONS[self.current_language]['no_history_data']
+                )
                 return
 
             df = pd.DataFrame(history)
@@ -528,7 +588,12 @@ class HistoryWindow:
             df = df[['date', 'time', 'client', 'device_name']]
             
             # Rename columns
-            df.columns = [TRANSLATIONS[self.current_language]['date'], TRANSLATIONS[self.current_language]['time'], TRANSLATIONS[self.current_language]['client'], TRANSLATIONS[self.current_language]['device_name']]
+            df.columns = [
+                TRANSLATIONS[self.current_language]['date'],
+                TRANSLATIONS[self.current_language]['time'],
+                TRANSLATIONS[self.current_language]['client'],
+                TRANSLATIONS[self.current_language]['device_name']
+            ]
 
             # Ask user for file path
             file_path = filedialog.asksaveasfilename(
@@ -539,9 +604,15 @@ class HistoryWindow:
             
             if file_path:
                 df.to_excel(file_path, index=False)
-                messagebox.showinfo(TRANSLATIONS[self.current_language]['success'], TRANSLATIONS[self.current_language]['export'] + " " + TRANSLATIONS[self.current_language]['success'])
+                messagebox.showinfo(
+                    TRANSLATIONS[self.current_language]['success'],
+                    TRANSLATIONS[self.current_language]['export_success'].format(file_path)
+                )
         except Exception as e:
-            messagebox.showerror(TRANSLATIONS[self.current_language]['error_title'], f"Erreur lors de l'export: {str(e)}")
+            messagebox.showerror(
+                TRANSLATIONS[self.current_language]['error_title'],
+                TRANSLATIONS[self.current_language]['export_error'].format(str(e))
+            )
 
 class SettingsWindow:
     def __init__(self, parent, current_language, callback):
