@@ -4,13 +4,14 @@ import customtkinter as ctk
 import tkinter as tk
 from tkinter import messagebox, filedialog, ttk
 from tkcalendar import DateEntry
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 import json
 import subprocess
 import psutil
 import webbrowser
 import sys
 import signal
+import platform
 
 # Dictionnaire des traductions
 TRANSLATIONS = {
@@ -991,15 +992,44 @@ class ModernRustDeskGUI:
         }
         self.status_label.configure(text=message, text_color=colors.get(status_type, "gray"))
 
+    def show_error_and_exit(self, message):
+        """Show error message and exit the application."""
+        messagebox.showerror("Error", message)
+        if hasattr(self, 'root'):
+            self.root.destroy()
+        sys.exit(1)
+
     def get_rustdesk_path(self):
-        # Get RustDesk path
-        paths = [
-            r"C:\Program Files\RustDesk\rustdesk.exe",
-            r"C:\Program Files (x86)\RustDesk\rustdesk.exe"
-        ]
+        # Get system platform
+        system = platform.system().lower()
+        
+        # Define paths for different operating systems
+        if system == "windows":
+            paths = [
+                r"C:\Program Files\RustDesk\rustdesk.exe",
+                r"C:\Program Files (x86)\RustDesk\rustdesk.exe"
+            ]
+        elif system == "darwin":  # macOS
+            paths = [
+                "/Applications/RustDesk.app/Contents/MacOS/RustDesk",
+                os.path.expanduser("~/Applications/RustDesk.app/Contents/MacOS/RustDesk")
+            ]
+        elif system == "linux":
+            paths = [
+                "/usr/bin/rustdesk",
+                "/usr/local/bin/rustdesk",
+                os.path.expanduser("~/.local/bin/rustdesk")
+            ]
+        else:
+            self.show_status(f"Unsupported operating system: {system}", "error")
+            return None
+
+        # Check each path
         for path in paths:
             if os.path.exists(path):
                 return path
+                
+        self.show_status(f"RustDesk was not found on your system ({system})", "error")
         return None
 
     def filter_clients(self, *args):
