@@ -22,7 +22,7 @@ A modern graphical interface for RustDesk to manage remote connections and track
 ## Installing Dependencies
 
 ```bash
-pip install customtkinter pandas openpyxl numpy
+pip install customtkinter tkcalendar pandas openpyxl numpy psutils psutil
 ```
 
 ## Usage

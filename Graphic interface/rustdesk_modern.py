@@ -638,7 +638,24 @@ class ModernRustDeskGUI:
         
         # Load address book
         try:
-            self.address_book = pd.read_excel(r"C:\Windows\address_book.xlsx")
+            address_book_path = self.get_address_book_path()
+            if not address_book_path:
+                system = platform.system().lower()
+                if system == "windows":
+                    error_msg = "Address book not found!\nPlease make sure the file exists at: C:\\Windows\\address_book.xlsx"
+                elif system == "darwin":
+                    error_msg = "Address book not found!\nPlease place the file in one of these locations:\n" \
+                              "- /Applications/RustAddBook/address_book.xlsx\n" \
+                              "- ~/Library/Application Support/RustAddBook/address_book.xlsx"
+                elif system == "linux":
+                    error_msg = "Address book not found!\nPlease place the file in one of these locations:\n" \
+                              "- /etc/rustaddbook/address_book.xlsx\n" \
+                              "- ~/.local/share/rustaddbook/address_book.xlsx\n" \
+                              "- ~/.rustaddbook/address_book.xlsx"
+                else:
+                    error_msg = "Address book not found and unsupported operating system!"
+                self.show_error_and_exit(error_msg)
+            self.address_book = pd.read_excel(address_book_path)
             if self.address_book.empty:
                 self.show_error_and_exit(TRANSLATIONS[self.current_language]['address_book_error'])
         except FileNotFoundError:
@@ -695,6 +712,35 @@ class ModernRustDeskGUI:
                 json.dump(config, f)
         except Exception as e:
             print(f"Erreur lors de la sauvegarde des préférences : {str(e)}")
+
+    def get_address_book_path(self):
+        """Get the path to address_book.xlsx based on the operating system."""
+        system = platform.system().lower()
+        
+        if system == "windows":
+            paths = [r"C:\Windows\address_book.xlsx"]
+        elif system == "darwin":  # macOS
+            paths = [
+                "/Applications/RustAddBook/address_book.xlsx",
+                os.path.expanduser("~/Library/Application Support/RustAddBook/address_book.xlsx")
+            ]
+        elif system == "linux":
+            paths = [
+                "/etc/rustaddbook/address_book.xlsx",
+                os.path.expanduser("~/.local/share/rustaddbook/address_book.xlsx"),
+                os.path.expanduser("~/.rustaddbook/address_book.xlsx")
+            ]
+        else:
+            self.show_status(f"Unsupported operating system: {system}", "error")
+            return None
+
+        # Check each path
+        for path in paths:
+            if os.path.exists(path):
+                return path
+        
+        # If no file is found, return None
+        return None
 
     def create_interface(self):
         # Create main container
