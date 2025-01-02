@@ -53,13 +53,6 @@ Download the latest version of the executable and run it directly.
 4. Click on a device, then enter the password to initiate a connection
 5. Connection history is automatically logged
 
-## Data Storage
-
-- Address Book: `C:\Windows\address_book.xlsx`
-- Connection History: 
-  - Windows: `%APPDATA%\RustDeskInterface\logs\connection_history.json`
-  - macOS/Linux: `~/.rustdeskinterface/logs/connection_history.json`
-
 ## Notes
 
 - The interface uses customtkinter for a modern design

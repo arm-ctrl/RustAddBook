@@ -17,12 +17,17 @@ A modern graphical interface for RustDesk to manage remote connections and track
 
 - Python 3
 - RustDesk installed and configured with Server ID and Key
-- `address_book.xlsx` file in `C:\Windows\` (required format: columns 'Client', 'Hostname', 'Rustdesk_ID')
+- `address_book.xlsx` file in one of the following locations:
+  - (Windows) `C:\Windows\address_book.xlsx`
+  - (Linux) `~/rustaddbook/address_book.xlsx` (Example: `/home/user/rustaddbook/address_book.xlsx`)
+  - (Linux) `~/.rustaddbook/address_book.xlsx` (Example: `/home/user/.rustaddbook/address_book.xlsx`)
+  - (macOS) `/Applications/RustAddBook/address_book.xlsx`
+  - (macOS) `~/Library/Application Support/RustAddBook/address_book.xlsx`
 
 ## Installing Dependencies
 
 ```bash
-pip install customtkinter tkcalendar pandas openpyxl numpy psutils psutil
+pip install customtkinter tkcalendar pandas openpyxl numpy psutil psutils
 ```
 
 ## Usage
@@ -52,13 +57,6 @@ Download the latest version of the executable and run it directly.
 3. Select a client to view their devices
 4. Click on a device, then enter the password to initiate a connection
 5. Connection history is automatically logged
-
-## Data Storage
-
-- Address Book: `C:\Windows\address_book.xlsx`
-- Connection History: 
-  - Windows: `%APPDATA%\RustDeskInterface\logs\connection_history.json`
-  - macOS/Linux: `~/.rustdeskinterface/logs/connection_history.json`
 
 ## Notes
 
