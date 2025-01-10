@@ -855,62 +855,76 @@ class ModernRustDeskGUI:
         self.create_status_bar()
 
     def create_header(self):
-        # Create header
+        # Create header frame
         header = ctk.CTkFrame(self.main_container, fg_color="transparent")
         header.pack(fill="x", padx=20, pady=(10, 20))
 
         # Create title
         title = ctk.CTkLabel(header, text=TRANSLATIONS[self.current_language]['title'], 
                            font=("Roboto", 24, "bold"))
-        title.pack(side="left")
+        title.pack(side=tk.LEFT)
 
-        # Create action buttons
+        # Create buttons frame
         buttons_frame = ctk.CTkFrame(header, fg_color="transparent")
-        buttons_frame.pack(side="right")
+        buttons_frame.pack(side=tk.RIGHT)
 
-        history_btn = ctk.CTkButton(buttons_frame, text=TRANSLATIONS[self.current_language]['history'], 
+        history_btn = ctk.CTkButton(buttons_frame, text=TRANSLATIONS[self.current_language]['history'],
                                   command=self.show_history,
                                   width=100)
         history_btn.pack(side=tk.LEFT, padx=(0, 5))
 
+        rustdesk_button = ctk.CTkButton(buttons_frame, text="R",
+                                      command=self.open_rustdesk,
+                                      width=40)
+        rustdesk_button.pack(side=tk.LEFT, padx=(0, 5))
+
         settings_btn = ctk.CTkButton(buttons_frame, text="⚙", 
                                   command=self.show_settings,
                                   width=35,
-                                  font=("Segoe UI", 16))
+                                  font=("Roboto", 16))
         settings_btn.pack(side=tk.LEFT, padx=(0, 5))
 
         help_btn = ctk.CTkButton(buttons_frame, text="?",
                                command=self.show_help,
-                               width=35,
-                               font=("Segoe UI", 16))
-        help_btn.pack(side=tk.LEFT, padx=(0, 10))
+                               width=35)
+        help_btn.pack(side=tk.LEFT)
 
         # Create time label
         self.time_label = ctk.CTkLabel(header, text="", font=("Roboto", 12))
         self.time_label.pack(side="right", padx=10)
 
     def create_left_column(self, parent):
-        # Create left column
-        left_frame = ctk.CTkFrame(parent, corner_radius=self.style["corner_radius"])
+        # Create left column with fixed width
+        left_frame = ctk.CTkFrame(parent, corner_radius=self.style["corner_radius"], width=350)
         left_frame.pack(side="left", fill="both", expand=True)
+        left_frame.pack_propagate(False)  # Prevent frame from shrinking
 
         # Create header
         header = ctk.CTkFrame(left_frame, fg_color="transparent")
-        header.pack(fill="x", padx=10, pady=10)
-        
-        # Create clients label
-        clients_label = ctk.CTkLabel(header, text=TRANSLATIONS[self.current_language]['select_client'], 
-                                   font=("Roboto", 20, "bold"))
-        clients_label.pack(side="left", padx=10)
+        header.pack(fill="x", padx=10, pady=(10, 0))
+
+        # Create title container
+        title_container = ctk.CTkFrame(header, fg_color="transparent")
+        title_container.pack(fill="x")
+
+        # Create title
+        title = ctk.CTkLabel(title_container, 
+                           text=TRANSLATIONS[self.current_language]['select_client'],
+                           font=("Roboto", 20, "bold"))
+        title.pack(side="left", padx=10)
+
+        # Create count container
+        count_container = ctk.CTkFrame(header, fg_color="transparent")
+        count_container.pack(fill="x")
 
         # Create clients count label
-        self.clients_count = ctk.CTkLabel(header, text="0 clients", 
+        self.clients_count = ctk.CTkLabel(count_container, text="0 clients", 
                                         font=("Roboto", 12))
-        self.clients_count.pack(side="right", padx=10)
+        self.clients_count.pack(side="left", padx=10)
 
         # Create search frame
         search_frame = ctk.CTkFrame(left_frame, fg_color="transparent")
-        search_frame.pack(fill="x", padx=10, pady=(0, 10))
+        search_frame.pack(fill="x", padx=10, pady=(5, 10))
 
         # Create search entry
         self.search_var = ctk.StringVar()
@@ -922,29 +936,38 @@ class ModernRustDeskGUI:
         self.search_entry.pack(fill="x")
 
         # Create clients list
-        self.clients_list = ctk.CTkScrollableFrame(left_frame)
-        self.clients_list.pack(fill="both", expand=True, padx=10, pady=(0, 10))
+        self.clients_frame = ctk.CTkScrollableFrame(left_frame)
+        self.clients_frame.pack(fill="both", expand=True, padx=10, pady=(0, 10))
 
     def create_right_column(self, parent):
-        # Create right column
-        right_frame = ctk.CTkFrame(parent, corner_radius=self.style["corner_radius"])
+        # Create right column with fixed width
+        right_frame = ctk.CTkFrame(parent, corner_radius=self.style["corner_radius"], width=350)
         right_frame.pack(side="right", fill="both", expand=True)
+        right_frame.pack_propagate(False)  # Prevent frame from shrinking
 
         # Create devices header
         devices_header = ctk.CTkFrame(right_frame, fg_color="transparent")
         devices_header.pack(fill="x", padx=10, pady=10)
 
-        # Create devices title label
-        self.devices_title = ctk.CTkLabel(devices_header, 
-                                        text=TRANSLATIONS[self.current_language]['select_device'], 
+        # Create title container
+        title_container = ctk.CTkFrame(devices_header, fg_color="transparent")
+        title_container.pack(fill="x")
+
+        # Create devices title
+        self.devices_title = ctk.CTkLabel(title_container, 
+                                        text=TRANSLATIONS[self.current_language]['select_device'],
                                         font=("Roboto", 20, "bold"))
         self.devices_title.pack(side="left", padx=10)
 
+        # Create count container
+        count_container = ctk.CTkFrame(devices_header, fg_color="transparent")
+        count_container.pack(fill="x", pady=(5, 0))
+
         # Create devices count label
-        self.devices_count = ctk.CTkLabel(devices_header, 
+        self.devices_count = ctk.CTkLabel(count_container, 
                                         text=TRANSLATIONS[self.current_language]['devices_count'].format(0),
                                         font=("Roboto", 12))
-        self.devices_count.pack(side="right", padx=10)
+        self.devices_count.pack(side="left", padx=10) 
 
         # Create devices frame
         self.devices_frame = ctk.CTkScrollableFrame(right_frame)
@@ -959,7 +982,7 @@ class ModernRustDeskGUI:
         connection_frame.pack(fill="x", padx=10, pady=10)
 
         # Create password entry
-        self.password_entry = ctk.CTkEntry(connection_frame, 
+        self.password_entry = ctk.CTkEntry(connection_frame,
                                          placeholder_text=TRANSLATIONS[self.current_language]['password_prompt'],
                                          show="•",
                                          height=35)
@@ -967,11 +990,11 @@ class ModernRustDeskGUI:
         self.password_entry.bind('<Return>', lambda event: self.connect())
 
         # Create connect button
-        self.connect_button = ctk.CTkButton(connection_frame, 
+        self.connect_button = ctk.CTkButton(connection_frame,
                                           text=TRANSLATIONS[self.current_language]['connect_button'],
                                           command=self.connect,
                                           height=35)
-        self.connect_button.pack(side="right")
+        self.connect_button.pack(side="right") 
 
     def create_status_bar(self):
         # Create status bar
@@ -991,13 +1014,13 @@ class ModernRustDeskGUI:
 
     def update_clients_list(self, clients):
         # Update clients list
-        for widget in self.clients_list.winfo_children():
+        for widget in self.clients_frame.winfo_children():
             widget.destroy()
         
         self.client_buttons = {}
         
         for client in clients:
-            client_frame = ctk.CTkFrame(self.clients_list, fg_color="transparent")
+            client_frame = ctk.CTkFrame(self.clients_frame, fg_color="transparent")
             client_frame.pack(fill="x", pady=2)
             
             btn = ctk.CTkButton(client_frame, 
@@ -1011,7 +1034,7 @@ class ModernRustDeskGUI:
             btn.pack(fill="x")
             self.client_buttons[client] = btn
         
-        self.clients_count.configure(text=f"{len(clients)} clients")
+        self.clients_count.configure(text=f"Clients: {len(clients)}")
 
     def show_devices(self, client):
         # Show devices for client
@@ -1045,7 +1068,7 @@ class ModernRustDeskGUI:
                                      anchor="w")
             device_btn.pack(fill="x")
         
-        self.devices_count.configure(text=TRANSLATIONS[self.current_language]['devices_count'].format(len(devices)))
+        self.devices_count.configure(text=f"Appareils: {len(devices)}")
 
     def select_device(self, device):
         # Select device
@@ -1133,37 +1156,46 @@ class ModernRustDeskGUI:
         sys.exit(1)
 
     def get_rustdesk_path(self):
-        # Get system platform
-        system = platform.system().lower()
-        
-        # Define paths for different operating systems
-        if system == "windows":
+        # Get RustDesk path based on operating system
+        system = platform.system()
+        if system == "Windows":
             paths = [
                 r"C:\Program Files\RustDesk\rustdesk.exe",
                 r"C:\Program Files (x86)\RustDesk\rustdesk.exe"
             ]
-        elif system == "darwin":  # macOS
+        elif system == "Darwin":  # macOS
             paths = [
-                "/Applications/RustDesk.app/Contents/MacOS/RustDesk",
-                os.path.expanduser("~/Applications/RustDesk.app/Contents/MacOS/RustDesk")
+                "/Applications/RustDesk.app/Contents/MacOS/rustdesk",
+                os.path.expanduser("~/Applications/RustDesk.app/Contents/MacOS/rustdesk")
             ]
-        elif system == "linux":
+        else:  # Linux
             paths = [
                 "/usr/bin/rustdesk",
                 "/usr/local/bin/rustdesk",
                 os.path.expanduser("~/.local/bin/rustdesk")
             ]
-        else:
-            self.show_status(f"Unsupported operating system: {system}", "error")
-            return None
 
-        # Check each path
         for path in paths:
             if os.path.exists(path):
                 return path
-                
+
         self.show_status(f"RustDesk was not found on your system ({system})", "error")
         return None
+
+    def open_rustdesk(self):
+        # Open RustDesk directly based on operating system
+        if self.RUSTDESK_PATH and os.path.exists(self.RUSTDESK_PATH):
+            try:
+                system = platform.system()
+                if system == "Darwin":  # macOS
+                    subprocess.Popen(["open", "-a", "RustDesk"])
+                else:  # Windows and Linux
+                    subprocess.Popen([self.RUSTDESK_PATH])
+                self.show_status(f"RustDesk launched", "info")
+            except Exception as e:
+                self.show_status(f"Error launching RustDesk: {str(e)}", "error")
+        else:
+            self.show_status("RustDesk path not found", "error")
 
     def filter_clients(self, *args):
         # Filter clients
@@ -1190,7 +1222,7 @@ class ModernRustDeskGUI:
         
         # Update devices count with current number
         current_devices = len(self.current_devices) if hasattr(self, 'current_devices') else 0
-        self.devices_count.configure(text=TRANSLATIONS[new_language]['devices_count'].format(current_devices))
+        self.devices_count.configure(text=f"Appareils: {current_devices}")
         
         messagebox.showinfo(
             TRANSLATIONS[new_language]['settings_saved'],
@@ -1210,8 +1242,7 @@ class ModernRustDeskGUI:
         total_clients = len(clients)
         total_devices = len(self.address_book)
         self.clients_count.configure(
-            text=f"{TRANSLATIONS[self.current_language]['unique_clients']}: {total_clients} • "
-                 f"{TRANSLATIONS[self.current_language]['devices']}: {total_devices}"
+            text=f"Clients: {total_clients}"
         )
 
     def show_help(self):
