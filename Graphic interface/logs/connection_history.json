@@ -1,0 +1,34 @@
+[
+  {
+    "timestamp": "2025-02-24T09:47:46.976071",
+    "client": "Roger Besson",
+    "device_name": "SRVFI",
+    "device_id": 453013579.0,
+    "date": "24/02/2025",
+    "time": "09:47"
+  },
+  {
+    "timestamp": "2025-02-24T09:52:14.270380",
+    "client": "Roger Besson",
+    "device_name": "SRV01",
+    "device_id": "261417025",
+    "date": "24/02/2025",
+    "time": "09:52"
+  },
+  {
+    "timestamp": "2025-02-24T09:57:17.263415",
+    "client": "Roger Besson",
+    "device_name": "SRV01",
+    "device_id": "261417025",
+    "date": "24/02/2025",
+    "time": "09:57"
+  },
+  {
+    "timestamp": "2025-02-24T09:57:54.022271",
+    "client": "Roger Besson",
+    "device_name": "SRV01",
+    "device_id": "261417025",
+    "date": "24/02/2025",
+    "time": "09:57"
+  }
+]

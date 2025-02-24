@@ -2,6 +2,7 @@ import os
 import pandas as pd
 from colorama import init, Fore, Style
 from getpass import getpass
+import sys
 
 # Initialize colorama
 init(autoreset=True)
@@ -15,23 +16,26 @@ def print_header(title):
 print_header("Welcome to the RustDesk Connection Manager")
 print(Fore.LIGHTWHITE_EX + "Loading address book...\n")
 
+# Constants
+ADDRESS_BOOK_FILE = r"C:\Windows\address_book.csv"
+
 # Function to read the address book
-def load_address_book(file_path):
+def read_address_book(file_path):
+    """Read the address book from CSV file."""
     try:
-        # Read the Excel file
-        df = pd.read_excel(file_path)
+        df = pd.read_csv(file_path)
         # Check that all required columns are present
         required_columns = ['Client', 'Hostname', 'Rustdesk_ID']
         if not all(col in df.columns for col in required_columns):
-            print("Incorrect Excel file format. Required columns are:", required_columns)
+            print("Incorrect CSV file format. Required columns are:", required_columns)
             return None
         return df
     except FileNotFoundError:
-        print(f"Error: The file '{file_path}' was not found. Please check that the file exists at this location.")
-        return None
+        print(f"Error: Address book not found at {file_path}")
+        sys.exit(1)
     except Exception as e:
-        print(f"Error reading the Excel file: {str(e)}")
-        return None
+        print(f"Error reading address book: {str(e)}")
+        sys.exit(1)
 
 # Function to connect to a device
 def connect_to_device(rustdesk_path, device_id, password):
@@ -76,11 +80,8 @@ else:
     print("No valid path found for RustDesk.")
     RUSTDESK_PATH = None
 
-# Path to the Excel file containing the address book
-ADDRESS_BOOK_FILE = r"C:\Windows\address_book.xlsx"
-
 # Load the address book
-address_book = load_address_book(ADDRESS_BOOK_FILE)
+address_book = read_address_book(ADDRESS_BOOK_FILE)
 
 if address_book is not None:
     print(Fore.GREEN + "Address book loaded successfully!")

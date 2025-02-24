@@ -726,7 +726,7 @@ class ModernRustDeskGUI:
                 else:
                     error_msg = "Address book not found and unsupported operating system!"
                 self.show_error_and_exit(error_msg)
-            self.address_book = pd.read_excel(address_book_path)
+            self.address_book = pd.read_excel(address_book_path, dtype={'Rustdesk_ID': str})
             if self.address_book.empty:
                 self.show_error_and_exit(TRANSLATIONS[self.current_language]['address_book_error'])
         except FileNotFoundError:
